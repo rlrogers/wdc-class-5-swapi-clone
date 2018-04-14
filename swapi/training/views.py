@@ -1,3 +1,5 @@
+import json
+
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -52,7 +54,50 @@ def only_post_request(request):
     return JsonResponse({"success": True, "msg": "Yay! You did it."})
 
 
+@csrf_exempt
+def post_payload(request):
+    if request.method != 'POST':
+        return JsonResponse(
+            {"success": False, "msg": "We only support POST requests"}, status=400)
+
+    try:
+        payload = json.loads(request.body)
+    except ValueError:
+        return JsonResponse(
+            {"success": False, "msg": "Provide a valid JSON payload"}, status=400)
+
+    if not payload:
+        msg = "We got no payload :-("
+    else:
+        msg = "Yay! We got your payload: {}".format(dict(payload))
+    return JsonResponse({"success": True, "msg": msg})
+
+
 def custom_headers(request):
     response = JsonResponse({"success": True})
     response['X-RMOTR-IS-AWESOME'] = True
     return response
+
+
+def url_int_argument(request, first_arg):
+    return JsonResponse(
+        {"success": True, "msg": "We received this argument: {}".format(first_arg)})
+
+
+def url_str_argument(request, first_arg):
+    return JsonResponse(
+        {"success": True, "msg": "We received this argument: {}".format(first_arg)})
+
+
+def url_multi_arguments(request, first_arg, second_arg):
+    return JsonResponse(
+        {"success": True, "msg": "We received this two arguments: {}, {}".format(first_arg, second_arg)})
+
+
+def get_params(request):
+    arguments = request.GET
+    if not arguments:
+        msg = "We got no arguments :-("
+    else:
+        msg = "Yay! We got your arguments: {}".format(dict(arguments))
+    return JsonResponse({"success": True, "msg": msg})

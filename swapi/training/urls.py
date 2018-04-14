@@ -17,7 +17,14 @@ urlpatterns = [
 
     # methods
     path('only-post', views.only_post_request),
+    path('post-payload', views.post_payload),
 
     # headers
     path('custom-headers', views.custom_headers),
+
+    # URL arguments and parameters
+    path('arguments/<int:first_arg>/', views.url_int_argument),
+    path('arguments/<str:first_arg>/', views.url_str_argument),
+    path('arguments/<str:first_arg>/<int:second_arg>/', views.url_multi_arguments),
+    path('arguments/', views.get_params),
 ]
