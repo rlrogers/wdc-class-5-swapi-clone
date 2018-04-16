@@ -19,6 +19,22 @@ def list_people(request):
 
 @csrf_exempt
 def people_list_view(request):
+    """
+    People `list` actions:
+
+    Based on the request method, perform the following actions:
+
+        * GET: Return the list of all `People` objects in the database.
+
+        * POST: Create a new `People` object using the submitted JSON payload.
+
+    Make sure you add at least these validations:
+
+        * If the view receives another HTTP method out of the ones listed
+          above, return a `400` response.
+
+        * If submited payload is nos JSON valid, return a `400` response.
+    """
     if request.body:
         try:
             payload = json.loads(request.body)
@@ -63,6 +79,25 @@ def people_list_view(request):
 
 @csrf_exempt
 def people_detail_view(request, people_id):
+    """
+    People `detail` actions:
+
+    Based on the request method, perform the following actions:
+
+        * GET: Returns the `People` object with given `people_id`.
+
+        * PUT/PATCH: Updates the `People` object either partially (PATCH)
+          or completely (PUT) using the submitted JSON payload.
+
+        * DELETE: Deletes `People` object with given `people_id`.
+
+    Make sure you add at least these validations:
+
+        * If the view receives another HTTP method out of the ones listed
+          above, return a `400` response.
+
+        * If submited payload is nos JSON valid, return a `400` response.
+    """
     try:
         people = People.objects.get(id=people_id)
     except People.DoesNotExist:
